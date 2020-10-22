@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from './types'
+import { AxiosPromise, AxiosRequestConfig } from './types'
 import { buildURL } from '../helpers/url'
 import { transformRequest } from '../helpers/data'
 import { processHeaders } from '../helpers/headers'
@@ -45,9 +45,9 @@ function processConfig(config: AxiosRequestConfig): void {
  * @description 入口函数
  * @param {AxiosRequestConfig} config 请求配置
  */
-function axios(config: AxiosRequestConfig) {
+function axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
-  xhr(config)
+  return xhr(config)
 }
 
 export default axios
