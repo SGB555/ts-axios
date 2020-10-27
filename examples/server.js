@@ -73,6 +73,10 @@ router.get('/error/timeout', function(req, res) {
   }, 3000)
 })
 
+router.get('/extend/user', function(req, res) {
+  res.json({ code: 200, result: { name: 'pok', age: 1 }, message: 'success' })
+})
+
 app.use(router)
 const port = process.env.PORT || 8080
 module.exports = app.listen(port, () => {
