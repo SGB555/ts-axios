@@ -9,7 +9,7 @@ import {
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './InterceptorManager'
 
-interface Interceptors {
+export interface Interceptors {
   request: InterceptorManager<AxiosRequestConfig>
   response: InterceptorManager<AxiosResponse>
 }
@@ -52,8 +52,7 @@ export default class Axios {
     this.interceptors.response.forEach(interceptor => {
       chain.push(interceptor)
     })
-
-    let promise = Promise.reject(config)
+    let promise = Promise.resolve(config)
 
     while (chain.length) {
       const { resolved, rejected } = chain.shift()!

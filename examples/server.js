@@ -77,6 +77,10 @@ router.get('/extend/user', function(req, res) {
   res.json({ code: 200, result: { name: 'pok', age: 1 }, message: 'success' })
 })
 
+router.get('/interceptor/get', function(req, res) {
+  res.json({ code: 200, data: 0, message: 'success' })
+})
+
 app.use(router)
 const port = process.env.PORT || 8080
 module.exports = app.listen(port, () => {
