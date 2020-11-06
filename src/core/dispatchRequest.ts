@@ -16,7 +16,7 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
  */
 function transformUrl(config: AxiosRequestConfig): string {
   const { url, params } = config
-  return buildURL(url, params)
+  return buildURL(url!, params)
 }
 
 /**

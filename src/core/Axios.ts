@@ -21,7 +21,9 @@ interface PromiseChain {
 
 export default class Axios {
   interceptors: Interceptors
-  constructor() {
+  default: AxiosRequestConfig
+  constructor(initConfig: AxiosRequestConfig) {
+    this.default = initConfig
     this.interceptors = {
       request: new InterceptorManager<AxiosRequestConfig>(),
       response: new InterceptorManager<AxiosResponse>()
