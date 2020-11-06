@@ -1,4 +1,4 @@
-import { Interceptors } from "../core/Axios";
+import { Interceptors } from '../core/Axios'
 
 export interface AxiosRequestConfig {
   url?: string
@@ -8,6 +8,7 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+  [propName: string]: any
 }
 
 export type Method =
