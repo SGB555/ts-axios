@@ -1,6 +1,49 @@
+import { deepMerge, isPlainObject } from '../helpers/util'
 import { AxiosRequestConfig } from '../types'
 
 const strats = Object.create(null)
+// 默认合并策略
+function defaultStrat(val1: any, val2: any): any {
+  return typeof val2 !== 'undefined' ? val2 : val1
+}
+/**
+ * 只接受自定义配置合并策略
+ * 对于一些属性如 url、params、data，合并策略如下：
+ */
+function fromVal2Strat(val1: any, val2: any): any {
+  if (typeof val2 !== 'undefined') {
+    return val2
+  }
+
+  const stratKeysFromVal2 = ['url', 'params', 'data']
+
+  stratKeysFromVal2.forEach(key => {
+    strats[key] = fromVal2Strat
+  })
+}
+
+function deepMergeStrat(val1: any, val2: any): any {
+  if (isPlainObject(val2)) {
+    return deepMerge(val1, val2)
+  } else if (typeof val2 !== 'undefined') {
+    return val2
+  } else if (isPlainObject(val1)) {
+    return deepMerge(val1)
+  } else if (typeof val1 === 'undefined') {
+    return val1
+  }
+}
+
+const stratKeysFromVal2 = ['url', 'params', 'data']
+
+stratKeysFromVal2.forEach(key => {
+  strats[key] = fromVal2Strat
+})
+
+const stratKeysFromDeepMerge = ['headers', 'auth']
+stratKeysFromDeepMerge.forEach(key => {
+  strats[key] = deepMergeStrat
+})
 
 export default function mergeConfig(
   config1: AxiosRequestConfig,
@@ -11,26 +54,6 @@ export default function mergeConfig(
   }
 
   const config = Object.create(null)
-
-  // 默认合并策略
-  function defaultStrat(val1: any, val2: any): any {
-    return typeof val2 !== 'undefined' ? val2 : val1
-  }
-  /**
-   * 只接受自定义配置合并策略
-   * 对于一些属性如 url、params、data，合并策略如下：
-   */
-  function formVal2Strat(val1: any, val2: any): any {
-    if (typeof val2 !== 'undefined') {
-      return val2
-    }
-
-    const stratKeysFromVal2 = ['url', 'params', 'data']
-
-    stratKeysFromVal2.forEach(key => {
-      strats[key] = formVal2Strat
-    })
-  }
 
   for (let key in config2) {
     mergeField(key)

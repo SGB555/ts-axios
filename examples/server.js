@@ -81,6 +81,10 @@ router.get('/interceptor/get', function(req, res) {
   res.json({ code: 200, data: 0, message: 'success' })
 })
 
+router.post('/config/post', function(req, res) {
+  res.json(req.body)
+})
+
 app.use(router)
 const port = process.env.PORT || 8080
 module.exports = app.listen(port, () => {
