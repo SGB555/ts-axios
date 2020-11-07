@@ -1,5 +1,17 @@
 import { Interceptors } from '../core/Axios'
 
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
+}
+
+/**
+ * @description 实例类型的接口定义
+ */
+export interface CancelToken {
+  promise: Promise<string>
+  reason?: string
+}
+
 export interface AxiosRequestConfig {
   url?: string
   method?: Method
@@ -9,6 +21,23 @@ export interface AxiosRequestConfig {
   responseType?: XMLHttpRequestResponseType
   timeout?: number
   [propName: string]: any
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
+  cancelToken?: CancelToken
+}
+
+/**
+ * @description 取消方法
+ */
+export interface Canceler {
+  (message?: string): void
+}
+
+/**
+ * @description CancelToken 类构造函数参数的接口定义
+ */
+export interface CancelExecutor {
+  (cancel: Canceler): void
 }
 
 export type Method =
@@ -48,7 +77,7 @@ export interface AxiosError extends Error {
 
 export interface Axios {
   defaults: AxiosRequestConfig
-  
+
   interceptors: Interceptors
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
@@ -85,4 +114,8 @@ export interface AxiosInterceptorManager<T> {
   use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
 
   eject(id: number): void
+}
+
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
 }
